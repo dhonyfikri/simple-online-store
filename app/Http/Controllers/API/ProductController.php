@@ -21,32 +21,31 @@ class ProductController extends Controller
         $price_to = $request->input('price_to');
 
         $product = Product::with(['category', 'galleries']);
-        $result_product = null;
 
         if ($id) {
-            $result_product = $product->find($id);
+            $product = $product->find($id);
         }
         if ($name) {
-            $result_product = $product->where('name', 'like', '%' . $name . '%');
+            $product = $product->where('name', 'like', '%' . $name . '%');
         }
         if ($description) {
-            $result_product = $product->where('description', 'like', '%' . $description . '%');
+            $product = $product->where('description', 'like', '%' . $description . '%');
         }
         if ($tags) {
-            $result_product = $product->where('tags', 'like', '%' . $tags . '%');
+            $product = $product->where('tags', 'like', '%' . $tags . '%');
         }
         if ($price_from) {
-            $result_product = $product->where('price', '>=', $price_from);
+            $product = $product->where('price', '>=', $price_from);
         }
         if ($price_to) {
-            $result_product = $product->where('price', '<=', $price_to);
+            $product = $product->where('price', '<=', $price_to);
         }
         if ($categories) {
-            $result_product = $product->where('categories', $categories);
+            $product = $product->where('categories', $categories);
         }
 
-        if ($result_product != null && $result_product->count() > 0) {
-            return ResponseFormatter::success($id == null ? $result_product->paginate($limit) : $result_product, 'Data produk berhasil diambil.');
+        if ($product->count() > 0) {
+            return ResponseFormatter::success($id == null ? $product->paginate($limit) : $product, 'Data produk berhasil diambil.');
         } else {
             return ResponseFormatter::error(null, 'Data produk tidak ada.', 404);
         }
